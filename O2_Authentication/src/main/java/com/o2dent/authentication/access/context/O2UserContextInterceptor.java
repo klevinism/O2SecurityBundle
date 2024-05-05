@@ -19,7 +19,7 @@ public class O2UserContextInterceptor extends O2AbstractContext<O2UserContext> i
         if (handler instanceof HandlerMethod) {
             if(!this.isAuthorizedToMakeRequest((HandlerMethod) handler, O2UserContext.class)){
                 // Intercept the request because we take care of it.
-                response.sendError(500, "You do not have the right permissions for this request!");
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "You do not have the right permissions for this request!");
                 // Stop request from continuing.
                 return false;
             }

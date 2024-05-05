@@ -33,9 +33,9 @@ abstract class O2AbstractContext<T extends java.lang.annotation.Annotation>{
     protected boolean isAuthorizedToMakeRequest(HandlerMethod handler, Class<T> annotationClass){
         // Check if request hits a HandlerMethod
             var annotation = this.getAnnotationFromClassOrMethod(handler, annotationClass);
-            var roles = this.findAllRolesInAnnotation(annotation);
             // If HandlerMethod class/method has O2 custom context annotation
-            if (annotation != null && roles != null) {
+            if (annotation != null) {
+                var roles = this.findAllRolesInAnnotation(annotation);
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 // If user is authenticated
                 if (!(authentication instanceof AnonymousAuthenticationToken)
@@ -58,30 +58,30 @@ abstract class O2AbstractContext<T extends java.lang.annotation.Annotation>{
      */
     private boolean hasRequiredRoles(String[] roles, Collection<? extends GrantedAuthority> authorities){
         var requiredRoles = List.of(roles);
-        if(requiredRoles.isEmpty()) return false;
+        if(requiredRoles == null && requiredRoles.isEmpty()) return false;
+        if(requiredRoles.stream().anyMatch(role -> role.isEmpty() || role.isBlank())) return false;
+
         var oidcRoles = authorities.stream().map(authority -> authority.getAuthority()).toList();
         return oidcRoles.containsAll(requiredRoles);
     }
 
     /**
-     * Finds the 'roles' method in a context annotation via reflection and returns the method's value.
-     * @param annotation
+     * Finds the 'roles' method in a context class via reflection and returns the method's value.
      * @return
      */
     private String[] findAllRolesInAnnotation(T annotation) {
-        Class<? extends Annotation> annotationClass = annotation.getClass();
         var allAnnotationMethods = List.of(annotation.annotationType().getDeclaredMethods());
         var getRoleMethodIndex = allAnnotationMethods.indexOf("roles") != -1 ? allAnnotationMethods.indexOf("roles") : 0;
         var rolesMethod = allAnnotationMethods.get(getRoleMethodIndex);
 
         if(rolesMethod != null){
             try {
-                var roles = (String[])rolesMethod.invoke(annotationClass);
-                return roles;
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                new RuntimeException(e);
-                logger.error(e.getMessage());
+                var roles = rolesMethod.invoke(annotation);
+                return (String[])roles;
+            } catch (Exception e) {
+                logger.error(e.getCause() + " " +e.getMessage());
                 logger.error("Continue...");
+                new RuntimeException(e);
             }
         }
         return null;
