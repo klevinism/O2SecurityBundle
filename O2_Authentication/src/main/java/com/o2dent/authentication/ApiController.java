@@ -3,9 +3,10 @@ package com.o2dent.authentication;
 import com.o2dent.authentication.access.context.O2UserContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @O2UserContext(roles = {"anotherOne"})
-@org.springframework.web.bind.annotation.RestController
+@RestController
 @RequestMapping("/api")
 public class ApiController {
 
