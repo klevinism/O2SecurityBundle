@@ -1,6 +1,6 @@
 package com.o2dent.authentication;
 
-import com.o2dent.authentication.access.O2UserContext;
+import com.o2dent.authentication.access.context.O2UserContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +9,7 @@ import java.security.Principal;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-@O2UserContext(permissions = "ROLE_oxydent-user")
+@O2UserContext(roles = "ROLE_oxydent-user")
 @Controller
 public class WebController {
 

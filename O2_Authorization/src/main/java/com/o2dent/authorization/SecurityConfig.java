@@ -17,17 +17,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 @EnableWebSecurity
 public class SecurityConfig {
 
-//    @Bean
-//    ClientRegistrationRepository clientRegistrations() {
-//        ClientRegistration clientRegistration = ClientRegistrations
-//                .fromOidcIssuerLocation("http://localhost:8080/realms/master")
-//                .clientId("oxydent-module-authorization")
-//                .clientSecret("FUNUnK94fpvhvrvi1aXYygEPVLmnf0W6")
-//                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-//                .registrationId("keycloak")
-//                .build();
-//        return new InMemoryClientRegistrationRepository(clientRegistration);
-//    }
     @Bean
     OAuth2AuthorizedClientManager authorizedClientManager
             (ClientRegistrationRepository clientRegistrationRepository) {
