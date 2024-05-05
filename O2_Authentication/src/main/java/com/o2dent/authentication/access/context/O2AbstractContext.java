@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @param <T> annotation type
  */
-public abstract class O2AbstractContext<T extends java.lang.annotation.Annotation>{
+abstract class O2AbstractContext<T extends java.lang.annotation.Annotation>{
     private final Log logger = LogFactory.getLog(O2AbstractContext.class);
 
     /**
