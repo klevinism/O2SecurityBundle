@@ -1,6 +1,7 @@
 package com.o2dent.authentication.config;
 
 import com.o2dent.authentication.access.O2AuthoritiesMapper;
+import com.o2dent.authentication.access.O2OidcAccountService;
 import com.o2dent.authentication.access.context.O2UserContextInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 public class O2WebMvcConfiguration implements WebMvcConfigurer {
 
+    private final O2OidcAccountService o2OidcAccountService;
+
+    public O2WebMvcConfiguration(O2OidcAccountService o2OidcAccountService) {
+        this.o2OidcAccountService = o2OidcAccountService;
+    }
+
     @Bean
     public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
         http
@@ -32,7 +39,10 @@ public class O2WebMvcConfiguration implements WebMvcConfigurer {
                         .authenticated());
         http.oauth2ResourceServer((oauth2) -> oauth2
                 .jwt(Customizer.withDefaults()));
-        http.oauth2Login(Customizer.withDefaults())
+        http.oauth2Login(oauth2 ->
+                        oauth2.userInfoEndpoint(userInfoEndpointConfig ->
+                                userInfoEndpointConfig
+                                        .oidcUserService(this.o2OidcAccountService)))
                 .logout(logout -> logout.logoutSuccessUrl("/"));
         return http.build();
     }

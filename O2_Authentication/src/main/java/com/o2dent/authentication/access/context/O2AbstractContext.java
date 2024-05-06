@@ -8,9 +8,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.method.HandlerMethod;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -52,36 +52,36 @@ abstract class O2AbstractContext<T extends java.lang.annotation.Annotation>{
 
     /**
      * Check if current user's roles match the ones provided from the handler's annotation
-     * @param roles
-     * @param authorities
-     * @return
+     * @param roles String[]
+     * @param authorities Collection<? extends GrantedAuthority>
+     * @return boolean hasRequiredRoles
      */
     private boolean hasRequiredRoles(String[] roles, Collection<? extends GrantedAuthority> authorities){
         var requiredRoles = List.of(roles);
-        if(requiredRoles == null && requiredRoles.isEmpty()) return false;
+        if(requiredRoles.isEmpty()) return false;
         if(requiredRoles.stream().anyMatch(role -> role.isEmpty() || role.isBlank())) return false;
 
-        var oidcRoles = authorities.stream().map(authority -> authority.getAuthority()).toList();
-        return oidcRoles.containsAll(requiredRoles);
+        var oidcRoles = authorities.stream().map(GrantedAuthority::getAuthority).toList();
+        return new HashSet<>(oidcRoles).containsAll(requiredRoles);
     }
 
     /**
      * Finds the 'roles' method in a context class via reflection and returns the method's value.
-     * @return
+     * @return String[]
      */
     private String[] findAllRolesInAnnotation(T annotation) {
         var allAnnotationMethods = List.of(annotation.annotationType().getDeclaredMethods());
-        var getRoleMethodIndex = allAnnotationMethods.indexOf("roles") != -1 ? allAnnotationMethods.indexOf("roles") : 0;
+        var getRoleMethodIndex = allAnnotationMethods.contains("roles") ? allAnnotationMethods.indexOf("roles") : 0;
         var rolesMethod = allAnnotationMethods.get(getRoleMethodIndex);
 
         if(rolesMethod != null){
             try {
                 var roles = rolesMethod.invoke(annotation);
                 return (String[])roles;
-            } catch (Exception e) {
+            } catch (RuntimeException | IllegalAccessException | InvocationTargetException e) {
                 logger.error(e.getCause() + " " +e.getMessage());
                 logger.error("Continue...");
-                new RuntimeException(e);
+                throw new RuntimeException(e);
             }
         }
         return null;
@@ -89,9 +89,9 @@ abstract class O2AbstractContext<T extends java.lang.annotation.Annotation>{
 
     /**
      * Grabs the current annotation found in the handler's method, or it's member class.
-     * @param methodOrClassHandler
-     * @param o2ClassToFind
-     * @return
+     * @param methodOrClassHandler Object
+     * @param o2ClassToFind Class<T>
+     * @return T
      */
     private T getAnnotationFromClassOrMethod(Object methodOrClassHandler, Class<T> o2ClassToFind){
         HandlerMethod handlerMethod = (HandlerMethod) methodOrClassHandler;
