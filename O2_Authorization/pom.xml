@@ -4,14 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.o2dent</groupId>
-        <artifactId>o2_security_bundle</artifactId>
+        <groupId>com.o2dent.security</groupId>
+        <artifactId>bundle</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <packaging>jar</packaging>
 
-    <groupId>com.o2dent.bundle</groupId>
+    <groupId>com.o2dent.security</groupId>
     <artifactId>authorization</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 

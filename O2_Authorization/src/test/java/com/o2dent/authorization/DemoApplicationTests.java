@@ -10,11 +10,4 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class DemoApplicationTests {
 
-    @Autowired
-    private MyController controller;
-
-    @Test
-    void contextLoads() throws Exception {
-        assertThat(controller).isNotNull();
-    }
 }

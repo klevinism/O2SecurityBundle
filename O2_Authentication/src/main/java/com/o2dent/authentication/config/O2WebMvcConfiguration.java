@@ -3,8 +3,12 @@ package com.o2dent.authentication.config;
 import com.o2dent.authentication.access.O2AuthoritiesMapper;
 import com.o2dent.authentication.access.O2OidcAccountService;
 import com.o2dent.authentication.access.context.O2UserContextInterceptor;
+import com.o2dent.lib.accounts.AccountRepository;
+import com.o2dent.lib.accounts.AccountService;
+import com.o2dent.lib.accounts.Configurations;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +21,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
+@Import(Configurations.class)
 public class O2WebMvcConfiguration implements WebMvcConfigurer {
 
     private final O2OidcAccountService o2OidcAccountService;

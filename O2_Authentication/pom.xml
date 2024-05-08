@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.o2dent</groupId>
-        <artifactId>o2_security_bundle</artifactId>
+        <groupId>com.o2dent.security</groupId>
+        <artifactId>bundle</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <packaging>jar</packaging>
 
-    <groupId>com.o2dent</groupId>
+    <groupId>com.o2dent.security</groupId>
     <artifactId>authentication</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -87,6 +87,18 @@
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta.ws.rs-api</artifactId>
             <version>3.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.o2dent.lib</groupId>
+            <artifactId>accounts</artifactId>
+            <version>0.0.2-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
