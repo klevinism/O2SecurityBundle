@@ -9,7 +9,6 @@ import java.security.Principal;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-@O2UserContext(roles = "ROLE_oxydent-user")
 @Controller
 public class WebController {
 
@@ -24,6 +23,7 @@ public class WebController {
         return "redirect:/";
     }
 
+    @O2UserContext(roles = "ROLE_CUSTOMER")
     @GetMapping(path = "/customers")
     public String customers(Principal principal, Model model) {
         model.addAttribute("customers", "customerDAO.stream().map(x -> x.getName()).toArray()");

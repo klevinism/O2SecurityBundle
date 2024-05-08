@@ -50,7 +50,7 @@ public class O2AuthoritiesMapper implements GrantedAuthoritiesMapper {
         }
         return mappedAuthorities;
     }
-    private Collection generateAuthoritiesFromClaim(Collection roles) {
+    public static Collection generateAuthoritiesFromClaim(Collection roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).toList();
     }
 

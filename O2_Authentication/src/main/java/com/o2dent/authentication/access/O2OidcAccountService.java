@@ -4,12 +4,19 @@ import com.o2dent.lib.accounts.Account;
 import com.o2dent.lib.accounts.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Service
 public class O2OidcAccountService extends OidcUserService {
     private final AccountService accountService;
@@ -34,11 +41,9 @@ public class O2OidcAccountService extends OidcUserService {
         O2AccountInfo accountInfo = new O2AccountInfo(oidcUser);
         // see what other data from userRequest or oidcUser you need
 
-        Optional<Account> account = accountService.findByEmail("klevindelimeta@hotmail.com");
+        Optional<Account> account = accountService.findByEmail(accountInfo.getEmail());
 
-        Optional<Object> userOptional = Optional.empty();//userRepository.findByEmail(accountInfo.getEmail());
-
-        if (!userOptional.isPresent()) {
+        if (!account.isPresent()) {
             Object user = new Object();
 //            user.setEmail(googleUserInfo.getEmail());
 //            user.setName(googleUserInfo.getName());
@@ -46,6 +51,14 @@ public class O2OidcAccountService extends OidcUserService {
             // set other needed data
 
             //userRepository.save(user);
+        }
+
+        if(account.isPresent()){
+            var dbAuthorities = account.get().getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+            var oidcAuthorities = O2AuthoritiesMapper.generateAuthoritiesFromClaim(account.get().getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
+            // Add oxydent db roles to oidc (keycloak) roles
+            accountInfo.getGroups().addAll(oidcAuthorities);
+            accountInfo.getUserRoles().addAll(oidcAuthorities);
         }
 
         return accountInfo;

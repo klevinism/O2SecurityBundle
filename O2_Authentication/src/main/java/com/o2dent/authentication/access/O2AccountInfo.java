@@ -14,7 +14,7 @@ public class O2AccountInfo implements OidcUser {
 
     public O2AccountInfo(OidcUser oidcUser) {
         this.oidcUser = oidcUser;
-        this.attributes = oidcUser.getAttributes();
+        this.attributes = oidcUser.getClaims();
         this.userRoles = new O2AuthoritiesMapper().mapAuthorities(oidcUser.getAuthorities());
     }
 
@@ -49,6 +49,8 @@ public class O2AccountInfo implements OidcUser {
     public Map<String, Object> getAttributes() {
         return oidcUser.getAttributes();
     }
+
+    public Collection<String> getGroups(){ return (Collection<String>)oidcUser.getClaim("groups");}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

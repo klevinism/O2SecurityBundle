@@ -1,5 +1,6 @@
 package com.o2dent.authentication.access.context;
 
+import com.o2dent.authentication.access.O2AccountInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -40,14 +41,15 @@ abstract class O2AbstractContext<T extends java.lang.annotation.Annotation>{
                 // If user is authenticated
                 if (!(authentication instanceof AnonymousAuthenticationToken)
                         && authentication != null && authentication.isAuthenticated()) {
+                    O2AccountInfo account = (O2AccountInfo) authentication.getPrincipal();
                     // If required roles don't match user's role
-                    if(!hasRequiredRoles(roles, authentication.getAuthorities())){
+                    if(!hasRequiredRoles(roles, account.getUserRoles())){
                         // We will handle processing and prevent next handlers in chain from processing.
                         return false;
                     }
                 }
             }
-        return false;
+        return true;
     }
 
     /**
