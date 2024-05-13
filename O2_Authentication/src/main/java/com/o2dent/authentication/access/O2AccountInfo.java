@@ -15,7 +15,7 @@ public class O2AccountInfo implements OidcUser {
     public O2AccountInfo(OidcUser oidcUser) {
         this.oidcUser = oidcUser;
         this.attributes = oidcUser.getClaims();
-        this.userRoles = new O2AuthoritiesMapper().mapAuthorities(oidcUser.getAuthorities());
+        this.userRoles = oidcUser.getAuthorities();
     }
 
     public String getId() {

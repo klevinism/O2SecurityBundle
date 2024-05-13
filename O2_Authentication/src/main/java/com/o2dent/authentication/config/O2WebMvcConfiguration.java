@@ -2,8 +2,7 @@ package com.o2dent.authentication.config;
 
 import com.o2dent.authentication.access.O2AuthoritiesMapper;
 import com.o2dent.authentication.access.O2OidcAccountService;
-import com.o2dent.authentication.access.context.O2UserContextInterceptor;
-import com.o2dent.lib.accounts.AccountRepository;
+import com.o2dent.authentication.access.context.O2UserContextConstraint;
 import com.o2dent.lib.accounts.AccountService;
 import com.o2dent.lib.accounts.Configurations;
 import org.springframework.context.annotation.Bean;
@@ -25,9 +24,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class O2WebMvcConfiguration implements WebMvcConfigurer {
 
     private final O2OidcAccountService o2OidcAccountService;
+    private final AccountService accountService;
 
-    public O2WebMvcConfiguration(O2OidcAccountService o2OidcAccountService) {
+    public O2WebMvcConfiguration(O2OidcAccountService o2OidcAccountService, AccountService accountService) {
         this.o2OidcAccountService = o2OidcAccountService;
+        this.accountService = accountService;
     }
 
     @Bean
@@ -35,19 +36,18 @@ public class O2WebMvcConfiguration implements WebMvcConfigurer {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/customers*", HttpMethod.OPTIONS.name()))
-                        .permitAll()
+                        .authenticated()
                         .requestMatchers(new AntPathRequestMatcher("/customers*"))
                         .hasRole("oxydent-user")
                         .requestMatchers(new AntPathRequestMatcher("/"))
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated());
+                        .permitAll());
         http.oauth2ResourceServer((oauth2) -> oauth2
                 .jwt(Customizer.withDefaults()));
         http.oauth2Login(oauth2 ->
                         oauth2.userInfoEndpoint(userInfoEndpointConfig ->
                                 userInfoEndpointConfig
-                                        .oidcUserService(this.o2OidcAccountService)))
+                                        .oidcUserService(this.o2OidcAccountService)
+                                        .userAuthoritiesMapper(this.userAuthoritiesMapperForKeycloak())))
                 .logout(logout -> logout.logoutSuccessUrl("/"));
         return http.build();
     }
