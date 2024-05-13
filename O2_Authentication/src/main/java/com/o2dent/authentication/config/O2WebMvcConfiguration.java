@@ -57,8 +57,4 @@ public class O2WebMvcConfiguration implements WebMvcConfigurer {
         return new O2AuthoritiesMapper();
     }
 
-    @Override
-    public void addInterceptors(final InterceptorRegistry registry) {
-        registry.addInterceptor(new O2UserContextInterceptor());
-    }
 }
