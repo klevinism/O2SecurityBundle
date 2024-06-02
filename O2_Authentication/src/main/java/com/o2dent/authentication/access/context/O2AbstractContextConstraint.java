@@ -19,8 +19,9 @@ import java.util.List;
  * if the user has the right authorities to continue with the request.
  * By extending this class and by adding it as a constraint to an annotation class, it will initialize
  * a constraint validator for that annotation.
- * You can then add that annotation to whichever class/method you want to validate the right authorities.
- * Checks the roles provided in an annotation against the authenticated user's roles.
+ * You can then use this annotation on whichever class/method you want to validate the right authorities.
+ *
+ * A generic constraint to be used to generate annotations that check the authenticated user's roles.
  *
  * @param <C> annotation type AnnotationClass
  */
@@ -56,11 +57,9 @@ abstract class O2AbstractContextConstraint<C extends java.lang.annotation.Annota
      */
     @Override
     public boolean isValid(Object o, ConstraintValidatorContext context) {
-
         if(requiredRoles == null || requiredRoles.length < 1){
             return false;
         }
-
         return isAuthorizedToMakeRequest(requiredRoles, SecurityContextHolder.getContext().getAuthentication());
     }
 

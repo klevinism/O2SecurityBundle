@@ -2,9 +2,8 @@ package com.o2dent.authentication.config;
 
 import com.o2dent.authentication.access.O2AuthoritiesMapper;
 import com.o2dent.authentication.access.O2OidcAccountService;
-import com.o2dent.authentication.access.context.O2UserContextConstraint;
-import com.o2dent.lib.accounts.AccountService;
 import com.o2dent.lib.accounts.Configurations;
+import com.o2dent.lib.accounts.persistence.AccountService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -15,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
