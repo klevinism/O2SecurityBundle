@@ -1,4 +1,4 @@
-package com.o2dent.authorization.services;
+package com.o2dent.security.authorization.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;

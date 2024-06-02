@@ -1,7 +1,7 @@
-package com.o2dent.authentication.access;
+package com.o2dent.security.authentication.access;
 
-import com.o2dent.lib.accounts.Account;
-import com.o2dent.lib.accounts.AccountService;
+import com.o2dent.lib.accounts.entity.Account;
+import com.o2dent.lib.accounts.persistence.AccountService;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
@@ -16,12 +16,9 @@ import java.util.stream.Collectors;
 @Service
 public class O2OidcAccountService extends OidcUserService {
     private final AccountService accountService;
-
     public O2OidcAccountService(AccountService accountService) {
         this.accountService = accountService;
     }
-
-
     @Override
     public O2AccountInfo loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
         OidcUser oidcUser = super.loadUser(userRequest);

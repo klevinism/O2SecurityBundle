@@ -1,6 +1,6 @@
-package com.o2dent.authentication;
+package com.o2dent.security.authentication;
 
-import com.o2dent.authentication.access.context.O2UserContext;
+import com.o2dent.security.authentication.access.context.O2UserContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

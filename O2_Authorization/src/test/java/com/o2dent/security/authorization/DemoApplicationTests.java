@@ -1,4 +1,4 @@
-package com.o2dent.authorization;
+package com.o2dent.security.authorization;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

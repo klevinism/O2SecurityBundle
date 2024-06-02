@@ -1,7 +1,7 @@
-package com.o2dent.authentication.config;
+package com.o2dent.security.authentication.config;
 
-import com.o2dent.authentication.access.O2AuthoritiesMapper;
-import com.o2dent.authentication.access.O2OidcAccountService;
+import com.o2dent.security.authentication.access.O2AuthoritiesMapper;
+import com.o2dent.security.authentication.access.O2OidcAccountService;
 import com.o2dent.lib.accounts.Configurations;
 import com.o2dent.lib.accounts.persistence.AccountService;
 import org.springframework.context.annotation.Bean;
