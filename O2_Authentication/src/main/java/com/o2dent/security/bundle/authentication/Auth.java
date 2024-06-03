@@ -1,4 +1,4 @@
-package com.o2dent.security.authentication;
+package com.o2dent.security.bundle.authentication;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

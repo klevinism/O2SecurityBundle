@@ -1,5 +1,7 @@
-package com.o2dent.security.authentication.access;
+package com.o2dent.security.bundle.authentication.access;
 
+import com.o2dent.lib.accounts.entity.Account;
+import com.o2dent.lib.accounts.entity.Business;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
@@ -7,7 +9,10 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.Collection;
 import java.util.Map;
+
 public class O2AccountInfo implements OidcUser {
+    private Account account;
+    private Business currentBusiness;
     private final OidcUser oidcUser;
     private final Map<String, Object> attributes;
     private final Collection<? extends GrantedAuthority> userRoles;
@@ -16,6 +21,22 @@ public class O2AccountInfo implements OidcUser {
         this.oidcUser = oidcUser;
         this.attributes = oidcUser.getClaims();
         this.userRoles = oidcUser.getAuthorities();
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Business getCurrentBusiness() {
+        return currentBusiness;
+    }
+
+    public void setCurrentBusiness(Business currentBusiness) {
+        this.currentBusiness = currentBusiness;
     }
 
     public String getId() {

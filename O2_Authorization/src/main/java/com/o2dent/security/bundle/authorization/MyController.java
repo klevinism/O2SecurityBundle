@@ -1,6 +1,6 @@
-package com.o2dent.security.authorization;
+package com.o2dent.security.bundle.authorization;
 
-import com.o2dent.security.authorization.services.Requests;
+import com.o2dent.security.bundle.authorization.services.Requests;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,4 +1,4 @@
-package com.o2dent.security.authentication.access.context;
+package com.o2dent.security.bundle.authentication.access.context;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;

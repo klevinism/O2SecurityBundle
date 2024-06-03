@@ -11,7 +11,7 @@
 
     <packaging>jar</packaging>
 
-    <groupId>com.o2dent.security</groupId>
+    <groupId>com.o2dent.security.bundle</groupId>
     <artifactId>authorization</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 

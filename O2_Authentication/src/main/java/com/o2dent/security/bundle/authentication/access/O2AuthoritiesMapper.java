@@ -1,4 +1,4 @@
-package com.o2dent.security.authentication.access;
+package com.o2dent.security.bundle.authentication.access;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,4 +1,4 @@
-package com.o2dent.security.authentication.access;
+package com.o2dent.security.bundle.authentication.access;
 
 import com.o2dent.lib.accounts.entity.Account;
 import com.o2dent.lib.accounts.persistence.AccountService;
@@ -29,8 +29,7 @@ public class O2OidcAccountService extends OidcUserService {
         }
     }
 
-    private
-    O2AccountInfo processOidcUser(OidcUserRequest userRequest, OidcUser oidcUser) {
+    private O2AccountInfo processOidcUser(OidcUserRequest userRequest, OidcUser oidcUser) {
         O2AccountInfo accountInfo = new O2AccountInfo(oidcUser);
         // see what other data from userRequest or oidcUser you need
         Optional<Account> account = accountService.findByEmail(accountInfo.getEmail());

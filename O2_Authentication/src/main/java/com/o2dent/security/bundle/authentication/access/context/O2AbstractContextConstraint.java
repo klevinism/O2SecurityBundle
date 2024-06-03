@@ -1,4 +1,4 @@
-package com.o2dent.security.authentication.access.context;
+package com.o2dent.security.bundle.authentication.access.context;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
