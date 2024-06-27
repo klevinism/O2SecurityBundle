@@ -1,6 +1,7 @@
 package com.o2dent.security.bundle.authentication.access;
 
 import com.o2dent.lib.accounts.entity.Account;
+import com.o2dent.lib.accounts.entity.Business;
 import com.o2dent.lib.accounts.persistence.AccountService;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
@@ -30,36 +31,39 @@ public class O2OidcAccountService extends OidcUserService {
     }
 
     private O2AccountInfo processOidcUser(OidcUserRequest userRequest, OidcUser oidcUser) {
+        // Transform OidcUser into general O2AccountInfo
         O2AccountInfo accountInfo = new O2AccountInfo(oidcUser);
-        // see what other data from userRequest or oidcUser you need
+
+        // Find Account in o2dent's db to aggregate roles in the O2AccountInfo roles
         Optional<Account> account = accountService.findByEmail(accountInfo.getEmail());
 
         if (!account.isPresent()) {
             Account newUser = new Account();
             newUser.setAccount(true);
             newUser.setEmail(oidcUser.getEmail());
+            newUser.setUsername(oidcUser.getPreferredUsername());
             newUser.setName(oidcUser.getGivenName());
             newUser.setActive(true);
             newUser.setEnabled(true);
             newUser.setSurname(oidcUser.getFamilyName());
             newUser.setRoles(null);
-//            newUser.setUsername(oidcUser.getPreferredUsername());
-//            user.setEmail(googleUserInfo.getEmail());
-//            user.setName(googleUserInfo.getName());
-
-            // set other needed data
 
             account = Optional.of(accountService.createPlain(newUser));
-        }
+        }else{
+            if(account.get().getRoles() != null){
+                var oidcAuthorities = account.get().getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
 
-        if(account.isPresent() && account.get().getRoles() != null){
-            var oidcAuthorities = account.get().getRoles().stream().map(role -> role.getName()).collect(Collectors.toList());
+                Optional<Business> currentBusiness = account.get().getBusinesses().stream().findFirst();
+                currentBusiness.ifPresent( business -> accountInfo.setCurrentBusiness(business));
 
-            // Add oxydent db roles to oidc (oauth2userinfo) roles
-            if(accountInfo.getUserInfo().hasClaim("groups") && !oidcAuthorities.isEmpty()){
-                ((Collection<String>)accountInfo.getUserInfo().getClaim("groups")).addAll(oidcAuthorities);
+                // Add oxydent db roles to oidc (oauth2userinfo) roles
+                if(accountInfo.getUserInfo().hasClaim("groups") && !oidcAuthorities.isEmpty()){
+                    ((Collection<String>)accountInfo.getUserInfo().getClaim("groups")).addAll(oidcAuthorities);
+                }
             }
         }
+
+        accountInfo.setAccount(account.get());
 
         return accountInfo;
     }

@@ -54,5 +54,4 @@ public class O2WebMvcConfiguration implements WebMvcConfigurer {
     public GrantedAuthoritiesMapper userAuthoritiesMapperForKeycloak() {
         return new O2AuthoritiesMapper();
     }
-
 }
