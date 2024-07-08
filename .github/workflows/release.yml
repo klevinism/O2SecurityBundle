@@ -1,0 +1,34 @@
+name: Release library
+
+run-name: Release library
+
+on:
+  push:
+    branches:
+      - '*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Copy repository contents via scp
+        uses: appleboy/scp-action@master
+        with:
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          PASSWORD: ${{ secrets.VMIPASSWORD }}
+          source: "."
+          target: "/var/www/dms/o2accounts/${GITHUB_REF#refs/heads/}"
+
+      - name: Executing remote command and deploying
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          PASSWORD: ${{ secrets.VMIPASSWORD }}
+          script: |
+            cd /var/www/dms/o2SecurityBundle/
+            mvn clean package verify install
+            rm -r /var/www/dms/o2SecurityBundle/*
