@@ -19,7 +19,7 @@ jobs:
           PORT: ${{ secrets.PORT }}
           PASSWORD: ${{ secrets.VMIPASSWORD }}
           source: "."
-          target: "/var/www/dms/o2accounts/${GITHUB_REF#refs/heads/}"
+          target: "/var/www/dms/o2SecurityBundle/${GITHUB_REF#refs/heads/}"
 
       - name: Executing remote command and deploying
         uses: appleboy/ssh-action@master
